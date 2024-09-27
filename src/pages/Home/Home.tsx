@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Home: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl text-gray-800 dark:text-gray-100">
+      <h1 className="text-4xl text-gray-800 dark:text-gray-100 text-center">
         Welcome to User Behavior App
       </h1>
       <Link
