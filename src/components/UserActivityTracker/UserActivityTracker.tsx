@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
 import { throttle } from "lodash";
+
 interface UserAction {
   clicks: { timestamp: number }[];
   mouseMoves: { timestamp: number }[];
   formSubmissions: { timestamp: number }[];
   timeOnPage: number;
+  navigation: { timestamp: number; path: string }[]; // Add navigation tracking
 }
 
 const UserActivityTracker: React.FC = () => {
@@ -14,9 +18,11 @@ const UserActivityTracker: React.FC = () => {
     mouseMoves: [],
     formSubmissions: [],
     timeOnPage: 0,
+    navigation: [],
   });
 
-  // Load dữ liệu từ localStorage khi component được render
+  const location = useLocation();
+
   useEffect(() => {
     const savedData = localStorage.getItem("userAction");
     if (savedData) {
@@ -24,14 +30,12 @@ const UserActivityTracker: React.FC = () => {
     }
   }, []);
 
-  // Theo dõi clicks, mouse movements, thời gian trên trang
   useEffect(() => {
     const startTime = Date.now();
 
-    // Cập nhật thời gian ở trên trang mỗi giây
     const interval = setInterval(() => {
       const currentTime = Date.now();
-      const timeSpent = (currentTime - startTime) / 1000; // Thời gian theo giây
+      const timeSpent = (currentTime - startTime) / 1000;
       setUserAction((prev) => {
         const updatedActions = { ...prev, timeOnPage: timeSpent };
         localStorage.setItem("userAction", JSON.stringify(updatedActions));
@@ -39,7 +43,6 @@ const UserActivityTracker: React.FC = () => {
       });
     }, 1000);
 
-    // Xử lý sự kiện click với lodash throttle
     const handleClick = throttle(() => {
       const timestamp = Date.now();
       setUserAction((prev) => {
@@ -51,9 +54,8 @@ const UserActivityTracker: React.FC = () => {
         return updatedActions;
       });
       toast.info("You clicked on the page!");
-    }, 1000); // Chỉ cho phép gọi sự kiện mỗi 1 giây
+    }, 1000);
 
-    // Xử lý sự kiện mousemove với lodash throttle
     const handleMouseMove = throttle(() => {
       const timestamp = Date.now();
       setUserAction((prev) => {
@@ -65,25 +67,35 @@ const UserActivityTracker: React.FC = () => {
         return updatedActions;
       });
 
-      // Hiển thị toast cho lần di chuyển chuột đầu tiên
       if (userAction.mouseMoves.length === 0) {
         toast.info("Mouse moved for the first time!");
       }
-    }, 1000); // Chỉ cho phép gọi sự kiện mỗi 1 giây
+    }, 1000);
 
     window.addEventListener("click", handleClick);
     window.addEventListener("mousemove", handleMouseMove);
 
-    // Cleanup: Xóa sự kiện và interval khi component unmount
+    // Track page navigation
+    setUserAction((prev) => {
+      const updatedActions = {
+        ...prev,
+        navigation: [
+          ...prev.navigation,
+          { timestamp: Date.now(), path: location.pathname },
+        ],
+      };
+      localStorage.setItem("userAction", JSON.stringify(updatedActions));
+      return updatedActions;
+    });
+
     return () => {
       window.removeEventListener("click", handleClick);
       window.removeEventListener("mousemove", handleMouseMove);
       clearInterval(interval);
     };
-  }, [userAction.mouseMoves.length]); // Chỉ thay đổi khi số lần di chuyển chuột thay đổi
+  }, [location.pathname]); // Run effect when location changes
 
-  // Định nghĩa hàm handleFormSubmit ở bên ngoài useEffect
-  const handleFormSubmit = (event: React.FormEvent) => {
+  const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const timestamp = Date.now();
     setUserAction((prev) => {
@@ -96,6 +108,15 @@ const UserActivityTracker: React.FC = () => {
     });
 
     toast.success("Form submitted successfully!");
+
+    // Send data to server using Axios
+    try {
+      await axios.post("https://example.com/api/userActions", userAction);
+      toast.success("User actions sent to the server successfully!");
+    } catch (error) {
+      toast.error("Failed to send data to the server.");
+      console.error("Error sending data:", error);
+    }
   };
 
   return (
@@ -124,6 +145,10 @@ const UserActivityTracker: React.FC = () => {
           <span className="font-semibold">
             {userAction.formSubmissions.length}
           </span>
+        </li>
+        <li className="text-lg text-gray-700 dark:text-gray-300">
+          Total Navigations:{" "}
+          <span className="font-semibold">{userAction.navigation.length}</span>
         </li>
       </ul>
 

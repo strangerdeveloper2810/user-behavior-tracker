@@ -10,7 +10,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// Dữ liệu từ localStorage
 const getDataFromLocalStorage = (filter: string) => {
   const savedData = localStorage.getItem("userAction");
   const actions = savedData
@@ -18,7 +17,6 @@ const getDataFromLocalStorage = (filter: string) => {
     : { clicks: [], mouseMoves: [], formSubmissions: [] };
   const now = Date.now();
 
-  // Lọc theo khoảng thời gian
   const filterDataByTime = (data: { timestamp: number }[], filter: string) => {
     let timeLimit = 0;
     switch (filter) {
@@ -58,7 +56,6 @@ const UserActivityChart: React.FC = () => {
 
   return (
     <div className="mt-5">
-      {/* Dropdown lựa chọn thời gian */}
       <select
         className="mb-4 p-2 border rounded"
         value={timeFilter}
