@@ -72,7 +72,3 @@ User Behavior Tracker is a React application that allows tracking and recording 
 - [React Router](https://reactrouter.com/)
 - [Axios](https://axios-http.com/docs/intro)
 - [Lodash](https://lodash.com/)
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
