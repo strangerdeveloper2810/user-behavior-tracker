@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import ProgressBar from "../components/ProgressBar"; // Component ProgressBar
 
 const Home = lazy(() => import("../pages/Home"));
@@ -7,10 +8,14 @@ const Dashboard = lazy(() => import("../pages/Dashboard"));
 
 const AppRoutes: React.FC = () => {
   const [progress, setProgress] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const location = useLocation();
 
-  // Tăng dần progress lên 100%
+  // Reset progress và loading khi chuyển trang
   useEffect(() => {
+    setProgress(0); // Reset progress mỗi khi điều hướng
+    setLoading(true); // Bật lại loading khi chuyển trang
+
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress >= 100) {
@@ -25,7 +30,7 @@ const AppRoutes: React.FC = () => {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [location.pathname]); // Lắng nghe sự thay đổi của URL
 
   // Hiển thị ProgressBar nếu loading vẫn là true, chỉ mount các component sau khi loading = false
   if (loading) {
@@ -38,6 +43,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
+      <ToastContainer />
     </Suspense>
   );
 };
