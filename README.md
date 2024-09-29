@@ -1,46 +1,78 @@
-# Getting Started with Create React App
+# User Behavior Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Introduction
 
-## Available Scripts
+User Behavior Tracker is a React application that allows tracking and recording user actions on a webpage, including clicks, mouse movements, form submissions, and time spent on the page. The data is stored in `localStorage` and can be sent to a server.
 
-In the project directory, you can run:
+## Features
 
-### `yarn start`
+- Track the number of clicks and mouse movements.
+- Record the time users spend on the page.
+- Track form submissions.
+- Store user action data in `localStorage`.
+- Send data to the server via an API.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Installation
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Requirements
 
-### `yarn test`
+- Node.js (>= 14.x)
+- Yarn
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Project Setup
 
-### `yarn build`
+1. Clone the repository:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   ```bash
+   git clone https://github.com/strangerdeveloper2810/user-behavior-tracker.git
+   cd user-behavior-tracker
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Install dependencies:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   ```bash
+   yarn install
+   ```
 
-### `yarn eject`
+3. Run the application:
+   ```bash
+   yarn start
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Project Structure
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `src/`: Directory containing the source code of the application.
+  - `components/`: Contains reusable React components.
+    - `Navbar/`: Navigation bar component.
+    - `ProgressBar/`: Component for displaying progress.
+    - `UserActivityChart/`: Component for displaying user activity in a chart.
+    - `UserActivityTracker/`: Component for tracking user actions.
+  - `pages/`: Contains page components.
+    - `Dashboard/`: Dashboard page component.
+    - `Home/`: Home page component.
+  - `routes/`: Contains routing components and configuration.
+    - `index.tsx`: Main routing configuration.
+  - `App.tsx`: Main application component.
+  - `index.tsx`: Entry point of the application.
+  - `App.css`: Main styles for the application.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Usage
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- As users interact with the page, their actions will be recorded and displayed in the `UserActivityTracker`.
+- Users can submit a form to log information and send data to the server.
 
-## Learn More
+## Notes
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Data is stored in `localStorage` and can be accessed again upon page reload.
+- Ensure that your server has an API to receive data from the application.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## References
+
+- [React Documentation](https://react.dev/)
+- [React Router](https://reactrouter.com/)
+- [Axios](https://axios-http.com/docs/intro)
+- [Lodash](https://lodash.com/)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
